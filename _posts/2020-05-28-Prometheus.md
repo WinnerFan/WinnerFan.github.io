@@ -130,8 +130,15 @@ scrape_configs:
     metrics_path: '/prometheus'  # 客户端暴露的采集数据接口
     file_sd_configs:             # 文件配置方式支持热更新，启动加入web.enable-lifecycle
     - files:
-       - 'targets.json'
+      - 'targets.json'
     # honor_labels: true         # pushgateway添加参数
+    metric_relabel_configs:      # 只是保留test_target指标中cmd正则test_label的指标，服务器处理
+      - source_labels: [__name__,cmd]
+        regex: 'test_target;test_label'
+        action: keep
+    params:                      # 只是保留test_target指标，客户端处理
+      'name[]':
+        - 'test_target'
 ```
 同目录下targets.json
 ```

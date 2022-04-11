@@ -75,11 +75,13 @@ docker image tag <current-tag> <new-tag>
 # 推送
 docker image push <new-tag>
 ```
-Dockfile
+Dockerfile
 ```
 FROM ... AS a
 WORKDIR ...
-COPY pom.xml .
+COPY ./pom.xml ./           cp
+COPY ./pom.xml ./test.xml   mv
+COPY ./conf ./config        mv
 RUN ...
 
 FROM ... AS b
@@ -95,7 +97,7 @@ CMD ["--spirng.profiles.active=postgres"]
 - `ENTRYPOINT command param1 param2` (shell form)，无法其他命令获取参数
 
 
-2. CMD，优先级低于ENTRYPOINT，参数提供会被`docker container run <tag> <param>`覆盖，CMD多个则只有最后一个生效，命令全路径
+2. CMD，优先级低于ENTRYPOINT，参数提供会被`docker container run <tag> <param>`覆盖，CMD多个则**只有最后**一个生效，命令全路径
 
 - `CMD ["executable","param1","param2"]` (exec form, this is the preferred form)
 - `CMD ["param1","param2"]` (as default parameters to ENTRYPOINT)
